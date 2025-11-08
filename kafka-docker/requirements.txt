@@ -39,3 +39,12 @@ urllib3==2.5.0
 Werkzeug==3.1.3
 fastapi
 uvicorn
+pandas
+numpy
+scikit-learn
+scipy
+pyarrow
+fastparquet
+psutil
+pytest
+pandera
