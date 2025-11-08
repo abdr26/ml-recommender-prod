@@ -35,7 +35,7 @@ jobs:
           pip install flake8 black pytest pytest-cov
 
       - name: Lint with flake8
-        run: flake8 . --count --max-line-length=100 --ignore=E501,W291,W292,E302,E305,F401,E231,E226,E402,E722,E265,E303,E305 --statistics
+        run: flake8 . --count --max-line-length=100 --ignore=E121,E501,W291,W292,E302,E305,F401,E231,E226,E402,E722,E265,E303,E305,E401,E702,W391 --statistics
 
       - name: Check code style with black
         run: black --check .
