@@ -1,21 +1,22 @@
-FROM python:3.12-bookworm
+#  Use a lightweight official Python base image
+FROM python:3.12-slim
 
+# Set working directory inside the container
 WORKDIR /app
 
-# Install system dependencies for compiling Python packages
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3-dev \
-    libatlas-base-dev \
-    gfortran \
-    && rm -rf /var/lib/apt/lists/*
+# Install system-level dependencies (for numpy/pandas/pyarrow builds)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential && rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+# Copy dependency list and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir flask pandas scikit-learn numpy==1.26.4 surprise psutil
+# Copy project code
+COPY . .
 
-EXPOSE 8000
+# Expose FastAPI port (Azure expects 8080)
+EXPOSE 8080
 
-CMD ["python3", "app.py"]
+# Default startup command for Azure Container Apps
+CMD ["uvicorn", "recommender.api:app", "--host", "0.0.0.0", "--port", "8080"]
